@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { ChevronLeft, ChevronRight, Star } from "lucide-react-native"
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ConstellationScreen() {
+  const insets = useSafeAreaInsets();
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
   const monthNames = [
@@ -37,7 +39,11 @@ export default function ConstellationScreen() {
   const dayLabels = ["일", "월", "화", "수", "목", "금", "토"]
 
   return (
-    <ScrollView className="flex-1 px-6 pt-12 pb-24" showsVerticalScrollIndicator={false}>
+    <ScrollView 
+      className="flex-1 px-6" 
+      style={{ paddingTop: Math.max(insets.top, 48), paddingBottom: Math.max(insets.bottom, 96) }} 
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <View className="pt-6 pb-8">
         <Text className="text-xl font-semibold text-white mb-1">별자리</Text>

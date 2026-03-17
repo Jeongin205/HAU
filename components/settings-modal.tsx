@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Switch, Platform } from 'react-native';
 import { X, Bell, Moon, Crown, ChevronRight } from "lucide-react-native"
+import * as Haptics from 'expo-haptics';
 
 interface SettingsModalProps {
   isOpen: boolean
@@ -7,6 +9,19 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [darkModeEnabled, setDarkModeEnabled] = useState(true);
+
+  const toggleNotifications = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setNotificationsEnabled(prev => !prev);
+  };
+
+  const toggleDarkMode = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setDarkModeEnabled(prev => !prev);
+  };
+
   return (
     <Modal
       visible={isOpen}
@@ -31,7 +46,10 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           <View className="flex-row items-center justify-between px-6 py-4">
             <Text className="text-xl font-semibold text-white">설정</Text>
             <TouchableOpacity 
-              onPress={onClose}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                onClose();
+              }}
               className="p-2 rounded-full"
               style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
             >
@@ -51,8 +69,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     <Text className="text-white text-base ml-2">일기 알림</Text>
                   </View>
                   <Switch 
-                    value={true} 
-                    onValueChange={() => {}} 
+                    value={notificationsEnabled} 
+                    onValueChange={toggleNotifications} 
                     trackColor={{ false: '#3f3f46', true: '#fbbf24' }}
                     thumbColor={Platform.OS === 'ios' ? undefined : '#fff'}
                   />
@@ -63,8 +81,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     <Text className="text-white text-base ml-2">다크 모드</Text>
                   </View>
                   <Switch 
-                    value={true} 
-                    onValueChange={() => {}} 
+                    value={darkModeEnabled} 
+                    onValueChange={toggleDarkMode} 
                     trackColor={{ false: '#3f3f46', true: '#fbbf24' }}
                     thumbColor={Platform.OS === 'ios' ? undefined : '#fff'}
                   />

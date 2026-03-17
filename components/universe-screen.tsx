@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Star, Flame, TrendingUp } from "lucide-react-native"
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function UniverseScreen() {
+  const insets = useSafeAreaInsets();
   // Mock data for word cloud
   const achievements = [
     { text: "일찍 일어났어요", size: "text-xl", opacity: 1 },
@@ -23,7 +25,11 @@ export default function UniverseScreen() {
   ]
 
   return (
-    <ScrollView className="flex-1 px-6 pt-12 pb-24" showsVerticalScrollIndicator={false}>
+    <ScrollView 
+      className="flex-1 px-6" 
+      style={{ paddingTop: Math.max(insets.top, 48), paddingBottom: Math.max(insets.bottom, 96) }} 
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <View className="pt-6 pb-8">
         <Text className="text-xl font-semibold text-white mb-1">나의 우주</Text>

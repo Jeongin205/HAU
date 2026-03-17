@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Star, CalendarDays, Sparkles } from "lucide-react-native"
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 
 export type Screen = "home" | "constellation" | "universe"
 
@@ -29,7 +30,10 @@ export default function BottomNav({ currentScreen, onNavigate }: BottomNavProps)
           return (
             <TouchableOpacity
               key={screen}
-              onPress={() => onNavigate(screen)}
+              onPress={() => {
+                if (!isActive) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                onNavigate(screen);
+              }}
               className="flex-col items-center gap-1 py-3 px-6 rounded-2xl"
             >
               <View className="relative items-center justify-center">

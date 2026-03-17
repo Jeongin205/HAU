@@ -1,5 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Flame, Settings, Star } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 
 interface HomeScreenProps {
   onOpenJournal: () => void;
@@ -14,6 +16,7 @@ export default function HomeScreen({
   hasRecordedToday,
   todayAchievement
 }: HomeScreenProps) {
+  const insets = useSafeAreaInsets();
   const today = new Date();
   const formattedDate = today.toLocaleDateString("ko-KR", {
     month: "long",
@@ -22,7 +25,7 @@ export default function HomeScreen({
   });
 
   return (
-    <View className="flex-1 px-6 pt-12">
+    <View className="flex-1 px-6" style={{ paddingTop: Math.max(insets.top, 48) }}>
       {/* Header */}
       <View className="flex-row items-center justify-between pt-6 pb-4">
         {/* Left: Date and Streak */}
@@ -36,7 +39,10 @@ export default function HomeScreen({
 
         {/* Right: Settings */}
         <TouchableOpacity 
-          onPress={onOpenSettings}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            onOpenSettings();
+          }}
           className="p-2.5 rounded-full transition-colors"
           style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
         >
@@ -91,7 +97,10 @@ export default function HomeScreen({
             </Text>
 
             <TouchableOpacity
-              onPress={onOpenJournal}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                onOpenJournal();
+              }}
               className="h-14 px-10 rounded-3xl bg-[#fbbf24] flex-row items-center justify-center gap-2.5"
               style={styles.buttonShadow}
             >
@@ -106,7 +115,10 @@ export default function HomeScreen({
       {hasRecordedToday && (
         <View className="pb-8 items-center justify-center">
           <TouchableOpacity 
-            onPress={onOpenJournal}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              onOpenJournal();
+            }}
             className="py-2 px-4"
           >
             <Text className="text-[#9ca3af] text-sm">다시 작성하기</Text>

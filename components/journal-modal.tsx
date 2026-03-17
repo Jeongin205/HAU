@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { View, Text, TouchableOpacity, TextInput, Modal, KeyboardAvoidingView, Platform, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { X, Sparkles, Sun, Eye, Heart, Check } from "lucide-react-native"
+import * as Haptics from 'expo-haptics';
 
 type SummaryType = "positive" | "objective" | "encouraging"
 
@@ -38,6 +39,7 @@ export default function JournalModal({ isOpen, onClose, onSave }: JournalModalPr
   const handleGetSummary = async () => {
     if (!journalText.trim()) return
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsLoading(true)
     // Simulate AI processing
     setTimeout(() => {
@@ -72,6 +74,7 @@ export default function JournalModal({ isOpen, onClose, onSave }: JournalModalPr
   }
 
   const handleSelectAndSave = (summary: Summary) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedSummary(summary.type)
     setTimeout(() => {
       onSave(summary.content)
@@ -105,7 +108,10 @@ export default function JournalModal({ isOpen, onClose, onSave }: JournalModalPr
           <View className="flex-row items-center justify-between px-6 py-4">
             <Text className="text-xl font-semibold text-white">오늘의 일기</Text>
             <TouchableOpacity 
-              onPress={onClose}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                onClose();
+              }}
               className="p-2 rounded-full"
               style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
             >
@@ -203,6 +209,7 @@ export default function JournalModal({ isOpen, onClose, onSave }: JournalModalPr
                 {/* Reset option */}
                 <TouchableOpacity 
                   onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     setSummaries(null)
                     setSelectedSummary(null)
                   }}
